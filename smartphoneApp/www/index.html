@@ -25,10 +25,13 @@
 
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
     <script type="text/javascript">
+
+
+
       var map_canvas;
 
       function initialize_map() {
-        var map_center = new google.maps.LatLng(35.6745973, 139.7778069);
+        var map_center = new google.maps.LatLng(34.693174, 135.19555);
         var map_options = {
           mapTypeId: google.maps.MapTypeId.ROADMAP,
           center: map_center,
@@ -36,20 +39,25 @@
         };
         map_canvas = new google.maps.Map(document.getElementById("map_canvas"), map_options);
 
-        create_marker(35.6745973, 139.7778069);
       }
-
-      function create_marker(lat, lng){
-        var marker_options = {
-          map: map_canvas,
-          position: new google.maps.LatLng(lat, lng),
-          zIndex: 0
-        };
-
-        var marker = new google.maps.Marker(marker_options);
-      }
-
       google.maps.event.addDomListener(window, "load", initialize_map);
+
+      function createMarker(lat, lng){
+//        マーカの作成
+        var marker = new google.maps.Marker({
+          position: new google.maps.LatLng(lat, lng),
+          map: map_canvas
+        });
+
+        google.maps.event.addListener(marker, "click", function() {
+          var infowindow = new google.maps.InfoWindow({
+            content: (marker.name)
+          });
+          infowindow.open(map_canvas, marker);
+        });
+
+        return marker;
+      }
     </script>
 
 
