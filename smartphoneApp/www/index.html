@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title></title>
+
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+    <link href="css/ionic.app.css" rel="stylesheet">
+    -->
+
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="cordova.js"></script>
+
+    <!-- your app's js -->
+    <script src="js/app.js"></script>
+    <script src="js/controllers.js"></script>
+    <script src="js/services.js"></script>
+
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
+    <script type="text/javascript">
+      var map_canvas;
+
+      function initialize_map() {
+        var map_center = new google.maps.LatLng(35.6745973, 139.7778069);
+        var map_options = {
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+          center: map_center,
+          zoom: 14,
+        };
+        map_canvas = new google.maps.Map(document.getElementById("map_canvas"), map_options);
+
+        create_marker(35.6745973, 139.7778069);
+      }
+
+      function create_marker(lat, lng){
+        var marker_options = {
+          map: map_canvas,
+          position: new google.maps.LatLng(lat, lng),
+          zIndex: 0
+        };
+
+        var marker = new google.maps.Marker(marker_options);
+      }
+
+      google.maps.event.addDomListener(window, "load", initialize_map);
+    </script>
+
+
+
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="jquery.xdomainajax.js"></script>
+    <script> var wp_url_admin_ajax = 'http://murata.dev/wp-admin/admin-ajax.php'; </script>
+    <script>
+
+//      var date1 = new Array();
+
+      jQuery(function ($) {
+        $.ajax({
+          type: 'POST',
+          dataType: 'json', // 追加
+          crossDomain: true,
+          url: wp_url_admin_ajax,
+          data: {
+            'action': 'tell_me'
+          },
+          success: function (response) {
+            console.log('aaaaaaaaaaaaaaaa');
+            console.log(response);
+            console.log('bbbbbbbbbbbbbbb');
+            var data1 = response;
+            console.log(data1);
+
+            for (i = 0; i < data1.length; i++) {
+              createMarker(data1[i].lat, data1[i].lng);
+            }
+          }
+        });
+//        console.log(date1);
+      });
+
+//      console.log(date1);
+
+    </script>
+
+
+
+
+
+  </head>
+  <body ng-app="starter">
+    <!--
+      The nav bar that will be updated as we navigate between views.
+    -->
+    <ion-nav-bar class="bar-stable">
+      <ion-nav-back-button>
+      </ion-nav-back-button>
+    </ion-nav-bar>
+    <!--
+      The views will be rendered in the <ion-nav-view> directive below
+      Templates are in the /templates folder (but you could also
+      have templates inline in this html file if you'd like).
+    -->
+    <ion-nav-view></ion-nav-view>
+  </body>
+</html>
